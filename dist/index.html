@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Convert Old Vertcoin Private Keys to New</title>
+  <style type="text/css">
+  * { margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body { display: flex; justify-content: center; align-items: center;}
+  #container { width: 440px; height: 300px; margin: 0px auto; border: 1px solid black; text-align: center; display: flex; justify-content: space-around; flex-direction: column; }
+  input {
+    padding: 10px;
+    margin: 10px;
+    border: 1px solid black;
+  }
+  </style>
+</head>
+
+<body>
+  <div id="container">
+    <strong>Enter an old VTC private key (starting with a 7 for example)</strong>
+    <input type="text" id="old" placeholder="..." onchange="convertIt()" onkeyup="convertIt()" spellcheck="false" autocomplete="off">
+    <strong>Your new converted private key!<br />Uncompressed and Compressed. Use either</strong>
+    <small id="new">...</small>
+  </div>
+  <script src="./main.js"></script>
+  <script type="text/javascript">
+  function convertIt() {
+    convert( document.getElementById('old').value );
+  }
+
+  function convert(old) {
+    try {
+      var decode = wif.decode(old);
+      var encodeUncompressed = wif.encode(128, decode.privateKey, false);
+      var encodeCompressed = wif.encode(128, decode.privateKey, true);
+      document.getElementById('new').innerHTML = encodeUncompressed + '<br /><br />' + encodeCompressed;
+    } catch(e) {
+      console.log(e);
+      document.getElementById('new').innerHTML = e;
+    }
+  }
+  </script>
+</body>
+</html>
